@@ -21,10 +21,14 @@ spec:
           args:
             - -c
             - |
+              set -e
               apk add --no-cache git
-              cp -r /app-src/* /app/
+              mkdir -p /app
+              cp /app-src/main.go /app/main.go
+              cp /app-src/go.mod /app/go.mod
               cd /app
               go mod download
+              go mod tidy
               go run main.go
           ports:
             - containerPort: 8080
