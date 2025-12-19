@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: demo-web-html
+  name: nginx-demo-html
   labels:
-    app: demo-web
+    app: nginx-demo
 data:
   index.html: |
     <!DOCTYPE html>

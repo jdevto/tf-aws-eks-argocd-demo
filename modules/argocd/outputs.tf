@@ -6,10 +6,6 @@ output "argocd_server_service_name" {
   value = "argocd-server"
 }
 
-output "application_name" {
-  value = var.app_name
-}
-
 output "argocd_username" {
   value       = "admin"
   description = "ArgoCD admin username"

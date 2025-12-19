@@ -24,8 +24,3 @@ variable "target_revision" {
   type    = string
   default = "main"
 }
-
-variable "app_name" {
-  type    = string
-  default = "demo-web"
-}
