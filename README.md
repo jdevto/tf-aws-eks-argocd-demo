@@ -8,9 +8,10 @@ Terraform demo for Amazon EKS with Argo CD GitOps.
   - VPC (from local module `modules/vpc`)
   - EKS (from local module `modules/eks`, using native AWS resources)
   - Argo CD (installed via Helm) + **bootstraps only the Argo CD `Application` CR**
-- **Argo CD** then fully manages the **sample web app** resources from `k8s-app/base`:
-  - `Deployment`
-  - `Service` type `LoadBalancer` (AWS ELB created/managed by Kubernetes)
+- **Argo CD** then fully manages **two sample web apps**:
+  - **demo-web** (nginx-based) from `k8s-app/nginx-demo`
+  - **go-demo** (Go-based with rate limiting) from `k8s-app/go-demo`
+  - Both include `Deployment` and `Service` type `LoadBalancer` (AWS ELB created/managed by Kubernetes)
 
 ## Repo structure
 
@@ -27,7 +28,8 @@ Terraform demo for Amazon EKS with Argo CD GitOps.
 │   ├── eks
 │   └── argocd
 └── k8s-app
-    └── base
+    ├── nginx-demo
+    └── go-demo
 ```
 
 ## Prereqs
@@ -47,7 +49,7 @@ Recommended: pass it on apply:
 terraform apply -var='repo_url=https://github.com/<you>/<this-repo>.git'
 ```
 
-The Argo CD Application will point at `k8s-app/base` in that repo.
+The Argo CD Applications will point at `k8s-app/nginx-demo` and `k8s-app/go-demo` in that repo.
 
 ## Run the demo
 
@@ -85,10 +87,14 @@ echo "Username: $(terraform output -raw argocd_username)"
 echo "Password: $(terraform output -raw argocd_password)"
 ```
 
-## Verify the sample app LoadBalancer
+## Verify the sample app LoadBalancers
 
 ```bash
+# Check nginx-based demo-web
 kubectl get svc demo-web
+
+# Check Go-based go-demo (with rate limiting: 100 req/min)
+kubectl get svc go-demo
 ```
 
 ## Clean destroy (including LBs)
