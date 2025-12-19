@@ -26,7 +26,6 @@ module "argocd" {
 
   repo_url        = var.repo_url
   target_revision = var.target_revision
-  app_path        = "k8s-app/base"
   aws_region      = var.aws_region
   cluster_name    = var.cluster_name
 

@@ -14,7 +14,7 @@ variable "cluster_version" {
 }
 
 variable "repo_url" {
-  description = "Git repo URL that Argo CD will watch for the sample app (k8s-app/base)."
+  description = "Git repository URL that Argo CD will watch for application manifests."
   type        = string
   default     = "https://github.com/jdevto/tf-aws-eks-argocd-demo.git"
 }
