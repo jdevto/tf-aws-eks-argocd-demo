@@ -9,7 +9,7 @@ Terraform demo for Amazon EKS with Argo CD GitOps.
   - EKS (from local module `modules/eks`, using native AWS resources)
   - Argo CD (installed via Helm) + **bootstraps only the Argo CD `Application` CR**
 - **Argo CD** then fully manages **two sample web apps**:
-  - **demo-web** (nginx-based) from `k8s-app/nginx-demo`
+  - **nginx-demo** (nginx-based) from `k8s-app/nginx-demo`
   - **go-demo** (Go-based with rate limiting) from `k8s-app/go-demo`
   - Both include `Deployment` and `Service` type `LoadBalancer` (AWS ELB created/managed by Kubernetes)
 
@@ -90,8 +90,8 @@ echo "Password: $(terraform output -raw argocd_password)"
 ## Verify the sample app LoadBalancers
 
 ```bash
-# Check nginx-based demo-web
-kubectl get svc demo-web
+# Check nginx-based nginx-demo
+kubectl get svc nginx-demo
 
 # Check Go-based go-demo (with rate limiting: 100 req/min)
 kubectl get svc go-demo

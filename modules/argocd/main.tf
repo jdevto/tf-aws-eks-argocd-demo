@@ -35,7 +35,7 @@ data "kubernetes_secret" "argocd_admin" {
 # We apply the Application via kubectl after Helm installs Argo CD + CRDs.
 resource "null_resource" "bootstrap_application" {
   triggers = {
-    app_name        = var.app_name
+    app_name        = "nginx-demo"
     namespace       = var.namespace
     repo_url        = var.repo_url
     target_revision = var.target_revision

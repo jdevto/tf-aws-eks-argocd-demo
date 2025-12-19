@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: demo-web
+  name: nginx-demo
   labels:
-    app: demo-web
+    app: nginx-demo
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: demo-web
+      app: nginx-demo
   template:
     metadata:
       labels:
-        app: demo-web
+        app: nginx-demo
     spec:
       containers:
-        - name: demo-web
+        - name: nginx-demo
           image: nginx:stable
           ports:
             - containerPort: 80
@@ -26,4 +26,4 @@ spec:
       volumes:
         - name: html-content
           configMap:
-            name: demo-web-html
+            name: nginx-demo-html
