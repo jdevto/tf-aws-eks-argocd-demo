@@ -93,7 +93,7 @@ echo "Password: $(terraform output -raw argocd_password)"
 # Check nginx-based nginx-demo
 kubectl get svc nginx-demo
 
-# Check Go-based go-demo (with rate limiting: 100 req/min)
+# Check Go-based go-demo
 kubectl get svc go-demo
 ```
 
