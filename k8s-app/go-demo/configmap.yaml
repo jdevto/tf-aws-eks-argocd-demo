@@ -13,22 +13,10 @@ data:
       "log"
       "net/http"
       "time"
-      "golang.org/x/time/rate"
     )
     const (
-      rateLimitPerMinute = 100
-      port               = "8080"
+      port = "8080"
     )
-    var limiter = rate.NewLimiter(rate.Every(time.Minute/rateLimitPerMinute), rateLimitPerMinute)
-    func rateLimitMiddleware(next http.Handler) http.Handler {
-      return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        if !limiter.Allow() {
-          http.Error(w, "Rate limit exceeded. Please try again later.", http.StatusTooManyRequests)
-          return
-        }
-        next.ServeHTTP(w, r)
-      })
-    }
     func helloHandler(w http.ResponseWriter, r *http.Request) {
       htmlContent := `<!DOCTYPE html>
     <html>
@@ -75,7 +63,6 @@ data:
         <div class="container">
             <h1>Hello from Go Server!</h1>
             <p>Your Go-based web server is running on EKS!</p>
-            <p><strong>Rate Limited:</strong> 100 requests/minute</p>
             <div class="info">
                 <p>Powered by Go + Amazon EKS + Argo CD</p>
                 <p>Time: ` + html.EscapeString(time.Now().Format("2006-01-02 15:04:05 MST")) + `</p>
@@ -89,18 +76,16 @@ data:
     func main() {
       mux := http.NewServeMux()
       mux.HandleFunc("/", helloHandler)
-      limitedMux := rateLimitMiddleware(mux)
       server := &http.Server{
         Addr:         ":" + port,
-        Handler:      limitedMux,
+        Handler:      mux,
         ReadTimeout:  15 * time.Second,
         WriteTimeout: 15 * time.Second,
         IdleTimeout:  60 * time.Second,
       }
-      log.Printf("Go server starting on port %s with rate limit: %d requests/minute", port, rateLimitPerMinute)
+      log.Printf("Go server starting on port %s", port)
       log.Fatal(server.ListenAndServe())
     }
   go.mod: |
     module go-server
     go 1.23
-    require golang.org/x/time v0.5.0
