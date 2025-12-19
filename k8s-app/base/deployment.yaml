@@ -19,6 +19,11 @@ spec:
           image: nginx:stable
           ports:
             - containerPort: 80
-          env:
-            - name: DEMO_MESSAGE
-              value: "Hello from EKS + Argo CD!"
+          volumeMounts:
+            - name: html-content
+              mountPath: /usr/share/nginx/html
+              readOnly: true
+      volumes:
+        - name: html-content
+          configMap:
+            name: demo-web-html
